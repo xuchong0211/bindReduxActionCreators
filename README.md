@@ -6,7 +6,7 @@ Bind Redux Action Creators
 import { loading, unloading } from "../modules/ui";
 import { search } from "../modules/list";
 import Component from "../components/Component";
-import bindCustomActionCreators from "../utils/bindCustomActionCreators";
+import bindCustomActionCreators, {handleError} from "../utils/bindCustomActionCreators";
 
 export default connect(
   state => {
@@ -21,7 +21,8 @@ export default connect(
       },
       dispatch,
       loading,
-      unloading
+      unloading,
+      handleError
     )
 )(Component);
 ```
