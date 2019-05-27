@@ -27,10 +27,10 @@ export class RequestError extends ExtendableBuiltin(Error) {
   }
 }
 
-const handleError = (err, dispatch) => {
-  console.log("handle error: ", err);
+export const handleError = ({ error, dispatch }) => {
+  console.log("handle error: ", error);
   let title = getTranslation({ id: "common.error" });
-  let message = err.message || "";
+  let message = error.message || "";
   let buttons = [
     {
       text: getTranslation({ id: "common.ok" }),
@@ -38,9 +38,9 @@ const handleError = (err, dispatch) => {
     }
   ];
 
-  if (err instanceof LoginError) {
+  if (error instanceof LoginError) {
     title = "login error";
-  } else if (err instanceof RequestError) {
+  } else if (error instanceof RequestError) {
     title = "Request error";
   } else {
     return;
@@ -52,20 +52,21 @@ const bindCustomActionCreators = (
   actions,
   dispatch,
   loadingAction,
-  unloadingAction
+  unloadingAction,
+  handlingError
 ) => {
   let newActions = {};
   for (let key in actions) {
     newActions[key] = async (...args) => {
       try {
         if (loadingAction) {
-          dispatch(loadingAction);
+          dispatch(loadingAction());
         }
         return await dispatch(actions[key](...args));
-      } catch (err) {
-        handleError(err, dispatch);
+      } catch (error) {
+        handlingError({ error, dispatch });
       } finally {
-        if (loadingAction) {
+        if (unloadingAction) {
           dispatch(unloadingAction());
         }
       }
