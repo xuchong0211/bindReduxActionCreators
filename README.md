@@ -1,7 +1,8 @@
 # bindReduxActionCreators
 Bind Redux Action Creators
 
-# Example
+## Example
+```
 import { loading, unloading } from "../modules/ui";
 import { search } from "../modules/list";
 import Component from "../components/Component";
@@ -23,3 +24,4 @@ export default connect(
       unloading
     )
 )(Component);
+```
